@@ -5675,7 +5675,7 @@ class RateQueryPhysioAdapter(nn.Module):
         return z_seq, hr_seq, rr_seq
 
 
-class PhaseNet(nn.Module):
+class SpectroPhys(nn.Module):
     def __init__(
         self,
         feature_dim=128,
@@ -5764,7 +5764,7 @@ class PhaseNet(nn.Module):
         self.latent_dim = latent_dim
         self.encoder_channels = tuple(int(channel) for channel in encoder_channels)
         if len(self.encoder_channels) < 2:
-            raise ValueError("PhaseNet encoder_channels must include stem and at least one encoder stage")
+            raise ValueError("SpectroPhys encoder_channels must include stem and at least one encoder stage")
         self.encoder_expand_ratio = int(encoder_expand_ratio)
         self.temporal_module = str(temporal_module).lower()
         self.hr_num_bins = int(hr_num_bins)
@@ -6578,7 +6578,7 @@ class PhaseNet(nn.Module):
                 long_context=physio_long_context,
             )
         else:
-            raise ValueError(f"Unsupported PhaseNet temporal module: {self.temporal_module}")
+            raise ValueError(f"Unsupported SpectroPhys temporal module: {self.temporal_module}")
         self.temporal_refiner = LongRangeTemporalMixer(
             feature_dim=feature_dim,
             hidden_dim=hidden_dim,
@@ -6689,7 +6689,7 @@ class PhaseNet(nn.Module):
         elif self.waveform_head_type in ("gru", "sequence"):
             self.regressor_head = SequenceRegressor(feature_dim=feature_dim)
         else:
-            raise ValueError(f"Unsupported PhaseNet waveform head type: {self.waveform_head_type}")
+            raise ValueError(f"Unsupported SpectroPhys waveform head type: {self.waveform_head_type}")
         self.frequency_waveform_decoder = None
         self.pos_waveform_gate = nn.Parameter(torch.tensor(0.0)) if self.pos_waveform_branch else None
         if bool(frequency_waveform_decoder):
@@ -6756,7 +6756,7 @@ class PhaseNet(nn.Module):
                     nn.Linear(hidden_dim, self.hr_num_bins),
                 )
             else:
-                raise ValueError(f"Unsupported PhaseNet HR head type: {self.hr_head_type}")
+                raise ValueError(f"Unsupported SpectroPhys HR head type: {self.hr_head_type}")
         else:
             self.hr_head = None
         scalar_hidden_dim = int(scalar_head_hidden_dim or hidden_dim)
@@ -6870,7 +6870,7 @@ class PhaseNet(nn.Module):
         for task in self.scalar_tasks:
             task_name = str(task)
             if not task_name:
-                raise ValueError("PhaseNet scalar task names must be non-empty")
+                raise ValueError("SpectroPhys scalar task names must be non-empty")
             if self.scalar_head_type in (
                 "pooled",
                 "summary",
@@ -6962,7 +6962,7 @@ class PhaseNet(nn.Module):
                         nn.Linear(scalar_hidden_dim, 1),
                     )
             else:
-                raise ValueError(f"Unsupported PhaseNet scalar head type: {self.scalar_head_type}")
+                raise ValueError(f"Unsupported SpectroPhys scalar head type: {self.scalar_head_type}")
 
     @staticmethod
     def _normalize_video_input(video_clip, normalization, eps=1e-6):
@@ -6981,7 +6981,7 @@ class PhaseNet(nn.Module):
             channel_mean = video_clip.mean(dim=reduce_dims, keepdim=True)
             channel_std = video_clip.std(dim=reduce_dims, keepdim=True, unbiased=False)
             return (video_clip - channel_mean) / (channel_std + eps)
-        raise ValueError(f"Unsupported PhaseNet encoder input normalization: {normalization}")
+        raise ValueError(f"Unsupported SpectroPhys encoder input normalization: {normalization}")
 
     @staticmethod
     def _raw_motion_stats(video_clip):
@@ -7382,7 +7382,7 @@ class WindowContextHRHead(nn.Module):
         return self.classifier(pooled)
 
 
-class WindowContextPhaseNet(nn.Module):
+class WindowContextSpectroPhys(nn.Module):
     def __init__(
         self,
         feature_dim=128,
@@ -7432,7 +7432,7 @@ class WindowContextPhaseNet(nn.Module):
             channel_mean = video_clip.mean(dim=(2, 3, 4), keepdim=True)
             channel_std = video_clip.std(dim=(2, 3, 4), keepdim=True, unbiased=False)
             return (video_clip - channel_mean) / (channel_std + eps)
-        raise ValueError(f"Unsupported WindowContextPhaseNet normalization: {normalization}")
+        raise ValueError(f"Unsupported WindowContextSpectroPhys normalization: {normalization}")
 
     def encode_clip(self, video_clip):
         video_clip = self._normalize_video_input(video_clip, self.encoder_input_normalization)
@@ -7459,7 +7459,7 @@ class WindowContextPhaseNet(nn.Module):
             raise ValueError(f"Expected 6D window input B,N,C,T,H,W, got {video_chunks.dim()}D")
         batch_size, num_chunks, channels, frames, height, width = video_chunks.shape
         if channels != 3:
-            raise ValueError(f"WindowContextPhaseNet expects channel-first chunks, got {video_chunks.shape}")
+            raise ValueError(f"WindowContextSpectroPhys expects channel-first chunks, got {video_chunks.shape}")
         flat = video_chunks.reshape(batch_size * num_chunks, channels, frames, height, width)
         tokens, ppg_chunks = self.encode_clip(flat)
         tokens = tokens.reshape(batch_size, num_chunks, -1)

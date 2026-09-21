@@ -66,13 +66,13 @@ MODEL_NAME=${VARIANT}_${TARGET}_fs10_validselect
 RUN_DIR=runs/exp/cardioresp_state_memory_longctx_warmproto_target_fewshot10_validselect/${MODEL_NAME}
 PROVENANCE_DIR=${RUN_DIR}/_provenance
 mkdir -p "${PROVENANCE_DIR}"
-cp neural_methods/model/PhaseNet.py "${PROVENANCE_DIR}/PhaseNet.py"
-cp tools/train_multitask_phasenet.py "${PROVENANCE_DIR}/train_multitask_phasenet.py"
+cp neural_methods/model/SpectroPhys.py "${PROVENANCE_DIR}/SpectroPhys.py"
+cp tools/train_multitask_spectrophys.py "${PROVENANCE_DIR}/train_multitask_spectrophys.py"
 cp scripts/submit_cardioresp_state_memory_longctx_warmproto_target_fewshot10_validselect.sbatch "${PROVENANCE_DIR}/target.sbatch"
-sha256sum neural_methods/model/PhaseNet.py tools/train_multitask_phasenet.py scripts/submit_cardioresp_state_memory_longctx_warmproto_target_fewshot10_validselect.sbatch > "${PROVENANCE_DIR}/sha256sum.txt"
+sha256sum neural_methods/model/SpectroPhys.py tools/train_multitask_spectrophys.py scripts/submit_cardioresp_state_memory_longctx_warmproto_target_fewshot10_validselect.sbatch > "${PROVENANCE_DIR}/sha256sum.txt"
 
 echo "variant=${VARIANT} target=${TARGET} model=${MODEL_NAME} temporal_module=cardioresp_state_memory warmstart=complex_proto_memory context_clips=${CONTEXT_CLIPS} selection=valid"
-python -u tools/train_multitask_phasenet.py \
+python -u tools/train_multitask_spectrophys.py \
   --train-csv "$TRAIN_CSV" \
   --valid-csv "$VALID_CSV" \
   --test-csv "$TEST_CSV" \

@@ -64,13 +64,13 @@ OUT_ROOT=runs/exp/subharmonic_cardioresp_memory_residualonly_target_fewshot10_va
 RUN_DIR=${OUT_ROOT}/${MODEL_NAME}
 PROVENANCE_DIR=${RUN_DIR}/_provenance
 mkdir -p "${PROVENANCE_DIR}"
-cp neural_methods/model/PhaseNet.py "${PROVENANCE_DIR}/PhaseNet.py"
-cp tools/train_multitask_phasenet.py "${PROVENANCE_DIR}/train_multitask_phasenet.py"
+cp neural_methods/model/SpectroPhys.py "${PROVENANCE_DIR}/SpectroPhys.py"
+cp tools/train_multitask_spectrophys.py "${PROVENANCE_DIR}/train_multitask_spectrophys.py"
 cp scripts/submit_subharmonic_cardioresp_memory_residualonly_target_fewshot10_validselect.sbatch "${PROVENANCE_DIR}/target.sbatch"
-sha256sum neural_methods/model/PhaseNet.py tools/train_multitask_phasenet.py scripts/submit_subharmonic_cardioresp_memory_residualonly_target_fewshot10_validselect.sbatch > "${PROVENANCE_DIR}/sha256sum.txt"
+sha256sum neural_methods/model/SpectroPhys.py tools/train_multitask_spectrophys.py scripts/submit_subharmonic_cardioresp_memory_residualonly_target_fewshot10_validselect.sbatch > "${PROVENANCE_DIR}/sha256sum.txt"
 
 echo "variant=${VARIANT} target=${TARGET} model=${MODEL_NAME} temporal_module=subharmonic_cardioresp_memory scalar_head_type=residual_spectral_rate train_new_subharmonic_only=1 selection=valid"
-python -u tools/train_multitask_phasenet.py \
+python -u tools/train_multitask_spectrophys.py \
   --train-csv "$TRAIN_CSV" \
   --valid-csv "$VALID_CSV" \
   --test-csv "$TEST_CSV" \

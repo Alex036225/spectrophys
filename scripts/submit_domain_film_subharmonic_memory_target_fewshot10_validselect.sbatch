@@ -104,13 +104,13 @@ with open(out_csv, "w", newline="") as handle:
 print(f"wrote_replay_csv={out_csv} target_rows={len(target_rows)} source_rows={len(source_rows)}")
 PY
 
-cp neural_methods/model/PhaseNet.py "${PROVENANCE_DIR}/PhaseNet.py"
-cp tools/train_multitask_phasenet.py "${PROVENANCE_DIR}/train_multitask_phasenet.py"
+cp neural_methods/model/SpectroPhys.py "${PROVENANCE_DIR}/SpectroPhys.py"
+cp tools/train_multitask_spectrophys.py "${PROVENANCE_DIR}/train_multitask_spectrophys.py"
 cp scripts/submit_domain_film_subharmonic_memory_target_fewshot10_validselect.sbatch "${PROVENANCE_DIR}/target.sbatch"
-sha256sum neural_methods/model/PhaseNet.py tools/train_multitask_phasenet.py scripts/submit_domain_film_subharmonic_memory_target_fewshot10_validselect.sbatch > "${PROVENANCE_DIR}/sha256sum.txt"
+sha256sum neural_methods/model/SpectroPhys.py tools/train_multitask_spectrophys.py scripts/submit_domain_film_subharmonic_memory_target_fewshot10_validselect.sbatch > "${PROVENANCE_DIR}/sha256sum.txt"
 
 echo "variant=${VARIANT} target=${TARGET} model=${MODEL_NAME} temporal_module=subharmonic_cardioresp_memory source_replay=1 dataset_conditioning=1 selection=valid"
-python -u tools/train_multitask_phasenet.py \
+python -u tools/train_multitask_spectrophys.py \
   --train-csv "$REPLAY_CSV" \
   --valid-csv "$VALID_CSV" \
   --test-csv "$TEST_CSV" \

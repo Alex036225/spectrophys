@@ -1,5 +1,5 @@
 \
-"""Evaluate a PhaseNet-MT checkpoint on KWH cached clips.
+"""Evaluate a SpectroPhys-MT checkpoint on KWH cached clips.
 
 KWH cached files provide video input and PPG waveform labels. This wrapper
 derives HR/PR labels from the PPG label by FFT and masks RR/SpO2.
@@ -19,7 +19,7 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader
 
-from tools.train_multitask_phasenet import (
+from tools.train_multitask_spectrophys import (
     MultiTaskClipDataset,
     evaluate,
     format_metrics,
@@ -127,7 +127,7 @@ def main() -> None:
     parser.add_argument("--input-csv", required=True)
     parser.add_argument("--checkpoint", required=True)
     parser.add_argument("--output-dir", required=True)
-    parser.add_argument("--name", default="kwh_phasenet_mt")
+    parser.add_argument("--name", default="kwh_spectrophys_mt")
     parser.add_argument("--batch-size", type=int, default=4)
     parser.add_argument("--num-workers", type=int, default=4)
     parser.add_argument("--device", default="cuda:0")

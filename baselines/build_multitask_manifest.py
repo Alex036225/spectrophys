@@ -1,5 +1,5 @@
 \
-"""Build masked multi-task clip manifests for PhaseNet.
+"""Build masked multi-task clip manifests for SpectroPhys.
 
 The source rPPG caches provide PPG waveform labels. PR/HR labels for these
 clips are derived from the label waveform spectrum. ZPU/ZPH clips can additionally

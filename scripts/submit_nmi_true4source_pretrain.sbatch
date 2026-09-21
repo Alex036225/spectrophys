@@ -18,7 +18,7 @@ if [[ "$MODEL" != ours ]]; then
     --frames 160 --epochs 16 --batch-size 2 --lr 8e-5 --weight-decay 1e-4 --num-workers 4 \
     --fs 30 --window-seconds 30 --hr-low-bpm 45 --hr-high-bpm 180 --rr-low-bpm 6 --rr-high-bpm 45 --seed 20260731
 else
-  python -u tools/train_multitask_phasenet.py \
+  python -u tools/train_multitask_spectrophys.py \
     --train-csv "$TRAIN" --valid-csv "$VALID" --output-dir "$OUT" --model-name ours \
     --epochs 16 --batch-size 4 --num-workers 4 --seed 20260731 --lr 8e-5 --weight-decay 1e-4 \
     --frames 160 --fs 30 --input-normalization channel_mean_center --waveform-head-type gru \

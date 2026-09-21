@@ -1,5 +1,5 @@
 \
-"""Build PhaseNet-MT manifests for KWH 600-frame cached data."""
+"""Build SpectroPhys-MT manifests for KWH 600-frame cached data."""
 
 from __future__ import annotations
 

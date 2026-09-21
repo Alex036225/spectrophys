@@ -1,5 +1,5 @@
 \
-"""Train PhaseNet with masked PPG/PR/HR/RR/SpO2 supervision."""
+"""Train SpectroPhys with masked PPG/PR/HR/RR/SpO2 supervision."""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ import torch
 import torch.nn.functional as F
 from torch.utils.data import DataLoader, Dataset, WeightedRandomSampler
 
-from neural_methods.model.PhaseNet import PhaseNet
+from neural_methods.model.SpectroPhys import SpectroPhys
 
 
 TASKS = ("pr", "hr", "rr", "spo2", "sbp", "dbp", "map")
@@ -275,7 +275,7 @@ def masked_mean(values: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
 
 def scalar_predictions_to_tensor(outputs: dict[str, torch.Tensor], device: torch.device) -> torch.Tensor:
     if outputs is None:
-        raise ValueError("PhaseNet did not return scalar outputs. Instantiate with scalar_tasks.")
+        raise ValueError("SpectroPhys did not return scalar outputs. Instantiate with scalar_tasks.")
     return torch.stack([outputs[task] for task in TASKS], dim=1).to(device)
 
 
@@ -569,7 +569,7 @@ def remap_scalar_heads_for_residual_temporal(state_dict):
 
 
 def make_model(args, device):
-    model = PhaseNet(
+    model = SpectroPhys(
         feature_dim=args.feature_dim,
         latent_dim=args.latent_dim,
         hidden_dim=args.hidden_dim,
@@ -775,8 +775,8 @@ def main():
     parser.add_argument("--train-csv", required=True)
     parser.add_argument("--valid-csv", required=True)
     parser.add_argument("--test-csv", default="")
-    parser.add_argument("--output-dir", default="runs/multitask_phasenet")
-    parser.add_argument("--model-name", default="multitask_phasenet")
+    parser.add_argument("--output-dir", default="runs/multitask_spectrophys")
+    parser.add_argument("--model-name", default="multitask_spectrophys")
     parser.add_argument("--pretrained-checkpoint", default="")
     parser.add_argument("--epochs", type=int, default=10)
     parser.add_argument("--batch-size", type=int, default=4)

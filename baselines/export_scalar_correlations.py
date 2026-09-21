@@ -8,11 +8,11 @@ import numpy as np
 
 def main() -> None:
     pickle_path = Path(
-        "runs/exp/multitask_phasenet_bp_headonly_trainval_zpu0406/"
+        "runs/exp/multitask_spectrophys_bp_headonly_trainval_zpu0406/"
         "bp_headonly_train29_32_41_49_from_rrlowfreq_best/"
         "bp_headonly_train29_32_41_49_from_rrlowfreq_best_test_outputs.pickle"
     )
-    out_path = Path("reports/zpu0406_subject19_phasenet_mt_bp_correlations.csv")
+    out_path = Path("reports/zpu0406_subject19_spectrophys_mt_bp_correlations.csv")
     obj = pickle.load(pickle_path.open("rb"))
     tasks = ["hr", "pr", "rr", "spo2", "sbp", "dbp", "map"]
     rows = []

@@ -1,5 +1,5 @@
 \
-"""Export frozen PhaseNet-MT rPPG and evaluate apnea classification by subject folds."""
+"""Export frozen SpectroPhys-MT rPPG and evaluate apnea classification by subject folds."""
 
 from __future__ import annotations
 
@@ -35,7 +35,7 @@ from sklearn.model_selection import GroupKFold
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
-from neural_methods.model.PhaseNet import PhaseNet
+from neural_methods.model.SpectroPhys import SpectroPhys
 
 
 TASKS = ("pr", "hr", "rr", "spo2", "sbp", "dbp", "map")
@@ -68,8 +68,8 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def build_model(checkpoint: Path, device: torch.device) -> PhaseNet:
-    model = PhaseNet(
+def build_model(checkpoint: Path, device: torch.device) -> SpectroPhys:
+    model = SpectroPhys(
         feature_dim=128,
         latent_dim=32,
         hidden_dim=128,
@@ -139,7 +139,7 @@ def prepare_video(frames: np.ndarray, target_frames: int, height: int, width: in
 
 @torch.inference_mode()
 def infer_rppg(
-    model: PhaseNet,
+    model: SpectroPhys,
     frames: np.ndarray,
     source_fs: float,
     model_fs: float,

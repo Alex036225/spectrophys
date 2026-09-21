@@ -37,7 +37,7 @@ if [[ "$MODEL" != ours ]]; then
 else
   CKPT=runs/exp/nmi_true4source_pretrain/ours/ours_best.pth
   NAME="ours_${TARGET}"
-  python -u tools/train_multitask_phasenet.py \
+  python -u tools/train_multitask_spectrophys.py \
     --train-csv "$TRAIN" --valid-csv "$VALID" --test-csv "$TEST" --output-dir "$OUT/ours" \
     --model-name "$NAME" --pretrained-checkpoint "$CKPT" --epochs 24 --batch-size 1 --num-workers 4 \
     --seed 20260731 --lr 6e-5 --weight-decay 1e-4 --frames 160 --context-clips "$CONTEXT" \
